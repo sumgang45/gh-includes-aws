@@ -1,0 +1,30 @@
+name: 'Terraform Deploy to AWS ECR'
+
+on: [push]
+defaults:
+      run:
+        shell: bash
+jobs:
+
+  Deploy-validate:
+    name: 'Deploy Stack to AWS'
+    runs-on: ubuntu-20.04
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: 'us-west-2'
+      
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+        
+      - name: 'Terraform Setup'
+        uses: hashicorp/setup-terraform@v1
+        
+      - name: 'Terraform init and Terraform apply'
+        run: | 
+          aws s3 ls
+          terraform init 
+          terraform apply -auto-approve 
+        
+  
