@@ -37,7 +37,7 @@ resource "aws_instance" "wb" {
   iam_instance_profile        = aws_iam_instance_profile.customer_profile.name
   key_name                    = aws_key_pair.ssh.key_name
   vpc_security_group_ids      = [aws_security_group.customer-SG.id]
-  subnet_id = aws_subnet.public-subnet1.id
+  subnet_id                   = aws_subnet.public-subnet1.id
   associate_public_ip_address = true
   user_data                   = file("script.sh")
   tags = {

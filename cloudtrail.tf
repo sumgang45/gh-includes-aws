@@ -1,5 +1,5 @@
 resource "aws_cloudtrail" "foobar" {
-  name                          = "github-aws-include-attack-${random_string.random.result}-trail"
+  name                          = "github-aws-include-attack-${random_string.suffix.result}-trail"
   s3_bucket_name                = aws_s3_bucket.foo.id
   s3_key_prefix                 = "prefix"
   include_global_service_events = true
@@ -12,7 +12,7 @@ resource "aws_cloudtrail" "foobar" {
 }
 
 resource "aws_s3_bucket" "foo" {
-  bucket        = "github-aws-include-attack-${random_string.random.result}"
+  bucket        = "github-aws-include-attack-${random_string.suffix.result}"
   force_destroy = true
 }
 
@@ -46,7 +46,7 @@ resource "aws_s3_bucket_policy" "trailpolicyfors3" {
               "Service": "cloudtrail.amazonaws.com"
             },
             "Action": "s3:GetBucketAcl",
-            "Resource": "arn:aws:s3:::github-aws-include-attack-${random_string.random.result}"
+            "Resource": "arn:aws:s3:::github-aws-include-attack-${random_string.suffix.result}"
         },
         {
             "Sid": "AWSCloudTrailWrite",
@@ -56,7 +56,7 @@ resource "aws_s3_bucket_policy" "trailpolicyfors3" {
             },
             "Action": "s3:PutObject",
             
-            "Resource": "arn:aws:s3:::github-aws-include-attack-${random_string.random.result}/prefix/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
+            "Resource": "arn:aws:s3:::github-aws-include-attack-${random_string.suffix.result}/prefix/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
             "Condition": {
                 "StringEquals": {
                     "s3:x-amz-acl": "bucket-owner-full-control"
@@ -72,7 +72,7 @@ POLICY
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "trail_role" {
-  name = "CW_role-${random_string.random.result}"
+  name = "CW_role-${random_string.suffix.result}"
 
   assume_role_policy = <<EOF
 {

@@ -1,6 +1,6 @@
 # Creating a Security Group for Logging server
 resource "aws_security_group" "customer-SG" {
-  vpc_id = aws_vpc.ase-ecr-vpc.id
+  vpc_id      = aws_vpc.ase-ecr-vpc.id
   description = "ALL"
 
   # Name of the security Group!

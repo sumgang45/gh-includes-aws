@@ -1,6 +1,6 @@
 
 resource "aws_cloudwatch_log_group" "example" {
-  name = "/aws/nonaws/ip-${random_string.random.result}"
+  name = "/aws/nonaws/ip-${random_string.suffix.result}"
 }
 
 resource "aws_cloudwatch_log_metric_filter" "nonawsip" {
@@ -21,7 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "sshec2fail" {
   depends_on = [
     aws_cloudwatch_log_group.example, aws_cloudwatch_log_metric_filter.nonawsip
   ]
-  alarm_name                = "Non-AWS-IP-Alarm-${random_string.random.result}"
+  alarm_name                = "Non-AWS-IP-Alarm-${random_string.suffix.result}"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
   metric_name               = "Non-AWS_IP"
