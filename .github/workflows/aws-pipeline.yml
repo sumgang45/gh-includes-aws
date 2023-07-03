@@ -4,27 +4,30 @@ on: [push]
 defaults:
       run:
         shell: bash
+permissions:
+    id-token: write   # This is required for requesting the JWT
+    contents: read
 jobs:
-
   Deploy-validate:
     name: 'Deploy Stack to AWS'
     runs-on: ubuntu-20.04
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: 'us-west-2'
       
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
-        
+
       - name: 'Terraform Setup'
         uses: hashicorp/setup-terraform@v1
-        
+
+      - name: 'configure aws credentials'
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::449630918120:role/github-oidc-connect-test
+          role-session-name: samplerolesession
+          aws-region: 'us-west-2'
+
       - name: 'Terraform init and Terraform apply'
         run: | 
           aws s3 ls
           terraform init 
           terraform apply -auto-approve 
-        
-  
